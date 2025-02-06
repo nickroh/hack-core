@@ -1,16 +1,18 @@
-﻿// kcu-hack.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-//
-
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h> // For _getch()
 #include <windows.h>
 #include <tlhelp32.h> // Never include Win32 headers before <windows.h>
+#include "constants.h"
 
 #pragma comment(lib, "Kernel32.lib")
 
 using namespace std;
 
 void hp_hack();
+void recoil_hack();
+void curr_ammo_hack();
+void reserved_ammo_hack();
+void speed_hack();
 DWORD check_pid();
 uintptr_t get_base_address(DWORD pid, const wstring& moduleName);
 DWORD getProcessID(const wstring& processName);
@@ -20,6 +22,7 @@ int main() {
     cout << "Press 'q' to print 'Welcome message'.\n"
         << "Press 'g' to get pid.\n"
         << "Press '0' to quit.\n"
+        << "Press 'h' to hack hp.\n"
         << "Press 'm' to get base addr.\n";
 
     while (true) {
@@ -41,6 +44,10 @@ int main() {
             uintptr_t baseAddress = get_base_address(pid, targetProcess);
             cout << "Base address for ac_client.exe 0x" << std::hex << baseAddress << "\n";
         }
+        else if (ch == 'h') {
+            hp_hack();
+        }
+
     }
 
     return 0;
@@ -108,7 +115,50 @@ uintptr_t get_base_address(DWORD pid, const wstring& moduleName) {
     CloseHandle(hSnapshot);
     return baseAddress;
 }
+
+// method that changes hp value
 void hp_hack() {
+    uintptr_t playerAddress = 0; // var that stores address of player
+        
+    // getting process info
+    DWORD pid = check_pid(); 
+    wstring targetProcess = L"ac_client.exe";
+    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
+
+    // get the address of pointer pointing player address
+    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+
+    // read the value of pointer
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(uintptr_t), 0);
+
+    // calculate address of hp based on offset
+    uintptr_t hp = playerAddress + Offsets::Health;
+    cout << "player addr" << std::hex <<  playerAddress << "\n";
+    // hp to set
+    int bugHp = 300;
+
+    // set hp to bugHp
+    WriteProcessMemory(TargetProcess, (BYTE*)(hp), &bugHp, sizeof(int), NULL);
+
+    // print some message 그래야 보기좋음 ㅇㅇ
+    cout << "HP changed to 300 successfully " << "\n";
+}
+
+// TODO: implement RECOIL HACK
+void recoil_hack() {
 
 }
+
+// TODO: implement ammo HACK
+void curr_ammo_hack() {
+
+}
+
+// TODO: implement ammo HACK
+void reserved_ammo_hack() {
+
+}
+
+
 
