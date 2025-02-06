@@ -39,7 +39,7 @@ int main() {
             DWORD pid = check_pid();
             wstring targetProcess = L"ac_client.exe";
             uintptr_t baseAddress = get_base_address(pid, targetProcess);
-            cout << "Base address for ac_client.exe " << baseAddress << "\n";
+            cout << "Base address for ac_client.exe 0x" << std::hex << baseAddress << "\n";
         }
     }
 
