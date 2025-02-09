@@ -511,7 +511,7 @@ local.properties
 *.lai
 *.so
 *.so.*
-*.dll
+
 *.dylib
 
 # Qt-es
