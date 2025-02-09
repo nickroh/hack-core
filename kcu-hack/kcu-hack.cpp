@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <tlhelp32.h> // Never include Win32 headers before <windows.h>
 #include "constants.h"
+#include "kcu_dll.h"
 
 #pragma comment(lib, "Kernel32.lib")
 
@@ -12,7 +13,7 @@ void hp_hack();
 void recoil_hack();
 void curr_ammo_hack();
 void reserved_ammo_hack();
-void speed_hack();
+void dll_test();
 DWORD check_pid();
 uintptr_t get_base_address(DWORD pid, const wstring& moduleName);
 DWORD getProcessID(const wstring& processName);
@@ -53,6 +54,9 @@ int main() {
     return 0;
 }
 
+void dll_test() {
+    PrintComment();
+}
 
 DWORD getProcessID(const wstring& processName) {
     DWORD pid = 0;
@@ -66,7 +70,7 @@ DWORD getProcessID(const wstring& processName) {
     pe32.dwSize = sizeof(PROCESSENTRY32);
 
     if (Process32First(hSnapshot, &pe32)) {
-        do {
+        do { 
             if (processName == pe32.szExeFile) {
                 pid = pe32.th32ProcessID;
                 break;
