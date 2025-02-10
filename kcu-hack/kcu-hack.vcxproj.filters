@@ -18,12 +18,24 @@
     <ClCompile Include="kcu-hack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="dll_inject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kcu_dll.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="constants.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="dll_inject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

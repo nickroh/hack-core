@@ -4,6 +4,8 @@
 #include <tlhelp32.h> // Never include Win32 headers before <windows.h>
 #include "constants.h"
 #include "kcu_dll.h"
+#include "dll_inject.h"
+#include <direct.h>
 
 #pragma comment(lib, "Kernel32.lib")
 
@@ -14,9 +16,21 @@ void recoil_hack();
 void curr_ammo_hack();
 void reserved_ammo_hack();
 void dll_test();
-DWORD check_pid();
+DWORD check_pid(const wstring& processName);
 uintptr_t get_base_address(DWORD pid, const wstring& moduleName);
 DWORD getProcessID(const wstring& processName);
+
+wstring get_current_directory() {
+    char cwd[1024];
+    if (_getcwd(cwd, sizeof(cwd)) != NULL) {
+        // Convert char[] (cwd) to std::wstring
+        return std::wstring(cwd, cwd + strlen(cwd));
+    }
+    else {
+        // Error getting current directory
+        return L"Error getting current directory";
+    }
+}
 
 int main() {
     char ch;
@@ -37,13 +51,25 @@ int main() {
             cout << "NUTRIA CHEAT ACTIAVTED!!\n";
         }
         else if (ch == 'g') {
-            DWORD pid = check_pid();
+            wstring targetProcess = L"ac_client.exe";
+            DWORD pid = check_pid(targetProcess);
         }
         else if (ch == 'm') {
-            DWORD pid = check_pid();
             wstring targetProcess = L"ac_client.exe";
+            DWORD pid = check_pid(targetProcess);
             uintptr_t baseAddress = get_base_address(pid, targetProcess);
-            cout << "Base address for ac_client.exe 0x" << std::hex << baseAddress << "\n";
+            cout << "Base address for ac_client.exe 0x" << hex << baseAddress << "\n";
+        }
+        else if (ch == 'i') {
+            wstring targetProcess = L"Notepad.exe"; // 메모장에 인젝트
+            DWORD pid = check_pid(targetProcess);
+            cout << "TESTING DLL INJECTION!\n";
+
+            wstring dll_name = get_current_directory() + L"\\kcu_dll.dll";
+            wcout << dll_name << "\n";
+
+            dll_injection(pid, dll_name);
+
         }
         else if (ch == 'h') {
             hp_hack();
@@ -58,75 +84,14 @@ void dll_test() {
     PrintComment();
 }
 
-DWORD getProcessID(const wstring& processName) {
-    DWORD pid = 0;
-    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnapshot == INVALID_HANDLE_VALUE) {
-        cerr << "Failed to create snapshot." << endl;
-        return 0;
-    }
-
-    PROCESSENTRY32 pe32;
-    pe32.dwSize = sizeof(PROCESSENTRY32);
-
-    if (Process32First(hSnapshot, &pe32)) {
-        do { 
-            if (processName == pe32.szExeFile) {
-                pid = pe32.th32ProcessID;
-                break;
-            }
-        } while (Process32Next(hSnapshot, &pe32));
-    }
-
-    CloseHandle(hSnapshot);
-    return pid;
-}
-
-DWORD check_pid() {
-    wstring targetProcess = L"ac_client.exe";
-    DWORD pid = getProcessID(targetProcess);
-
-    if (pid) {
-        wcout << "Process " << targetProcess << " found with PID: " << pid << endl;
-        return pid;
-    }
-    else {
-        wcout << "Process " << targetProcess << " not found." << endl;
-        return 0;
-    }
-}
-
-uintptr_t get_base_address(DWORD pid, const wstring& moduleName) {
-    uintptr_t baseAddress = 0;
-    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
-    if (hSnapshot == INVALID_HANDLE_VALUE) {
-        cerr << "Failed to create module snapshot." << endl;
-        return 0;
-    }
-
-    MODULEENTRY32 me32;
-    me32.dwSize = sizeof(MODULEENTRY32);
-
-    if (Module32First(hSnapshot, &me32)) {
-        do {
-            if (moduleName == me32.szModule) {
-                baseAddress = (uintptr_t)me32.modBaseAddr;
-                break;
-            }
-        } while (Module32Next(hSnapshot, &me32));
-    }
-
-    CloseHandle(hSnapshot);
-    return baseAddress;
-}
-
 // method that changes hp value
 void hp_hack() {
     uintptr_t playerAddress = 0; // var that stores address of player
         
     // getting process info
-    DWORD pid = check_pid(); 
     wstring targetProcess = L"ac_client.exe";
+    DWORD pid = check_pid(targetProcess);
+    
     uintptr_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
