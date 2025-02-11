@@ -116,7 +116,6 @@ void hp_hack() {
 
 // TODO: implement RECOIL HACK
 void recoil_hack() {
-    cout << 1 << "\n";
 
 }
 
