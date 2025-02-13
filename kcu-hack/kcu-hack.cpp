@@ -103,7 +103,11 @@ void hp_hack() {
 
     // calculate address of hp based on offset
     uintptr_t hp = playerAddress + Offsets::Health;
-    cout << "player addr" << std::hex <<  playerAddress << "\n";
+;
+    cout << std::hex << playerAddress << "\n";
+    cout << std::hex << hp << "\n";
+    cout << sizeof(uintptr_t) << "\n";
+    cout << "player addr 0x" << std::hex <<  playerAddress << "\n";
     // hp to set
     int bugHp = 300;
 
