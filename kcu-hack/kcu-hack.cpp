@@ -13,8 +13,8 @@ using namespace std;
 
 void hp_hack();
 void recoil_hack();
-void curr_ammo_hack();
-void reserved_ammo_hack();
+void rifle_ammo_hack();
+void armor_hack();
 void dll_test();
 DWORD check_pid(const wstring& processName);
 uintptr_t get_base_address(DWORD pid, const wstring& moduleName);
@@ -38,7 +38,9 @@ int main() {
         << "Press 'g' to get pid.\n"
         << "Press '0' to quit.\n"
         << "Press 'h' to hack hp.\n"
-        << "Press 'm' to get base addr.\n";
+        << "Press 'm' to get base addr.\n"
+        << "Press 'a' to hack armor.\n"
+        << "Press 't' to hack rifle ammo.\n";
 
     while (true) {
         ch = _getch(); // Get character input without pressing Enter
@@ -74,9 +76,13 @@ int main() {
         else if (ch == 'h') {
             hp_hack();
         }
-
+        else if (ch == 'a') {
+            armor_hack();
+        }
+        else if (ch == 't') {
+            rifle_ammo_hack();
+        }
     }
-
     return 0;
 }
 
@@ -99,7 +105,7 @@ void hp_hack() {
     uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
 
     // read the value of pointer
-    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(uintptr_t), 0);
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
     // calculate address of hp based on offset
     uintptr_t hp = playerAddress + Offsets::Health;
@@ -120,13 +126,63 @@ void recoil_hack() {
 }
 
 // TODO: implement ammo HACK
-void curr_ammo_hack() {
+void rifle_ammo_hack() {
+    uintptr_t playerAddress = 0; // var that stores address of player
 
+    // getting process info
+    wstring targetProcess = L"ac_client.exe";
+    DWORD pid = check_pid(targetProcess);
+
+    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
+
+    // get the address of pointer pointing player address
+    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+
+    // read the value of pointer
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
+
+    // calculate address of assualt rifle ammo based on offset
+    uintptr_t ara = playerAddress + Offsets::AssaultRifleAmmo;
+    cout << "player addr" << std::hex << playerAddress << "\n";
+    // armor to set
+    int bugAmmo = 300;
+
+    // set assualt rifle ammo to changed armor
+    WriteProcessMemory(TargetProcess, (BYTE*)(ara), &bugAmmo, sizeof(int), NULL);
+
+    // print some message
+    cout << "Assault Rifle Ammo changed to 300 successfully " << "\n";
 }
 
-// TODO: implement ammo HACK
-void reserved_ammo_hack() {
+// TODO: implement armor HACK
+void armor_hack() {
+    uintptr_t playerAddress = 0; // var that stores address of player
 
+    // getting process info
+    wstring targetProcess = L"ac_client.exe";
+    DWORD pid = check_pid(targetProcess);
+
+    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
+
+    // get the address of pointer pointing player address
+    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+
+    // read the value of pointer
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
+
+    // calculate address of armor based on offset
+    uintptr_t armor = playerAddress + Offsets::Armor;
+    cout << "player addr" << std::hex << playerAddress << "\n";
+    // armor to set
+    int bugArmor = 300;
+
+    // set armor to changed armor
+    WriteProcessMemory(TargetProcess, (BYTE*)(armor), &bugArmor, sizeof(int), NULL);
+
+    // print some message
+    cout << "Armor changed to 300 successfully " << "\n";
 }
 
 
