@@ -31,7 +31,7 @@ DWORD getProcessID(const wstring& processName) {
     return pid;
 }
 
-DWORD check_pid(__in const wstring& process_name) {
+DWORD check_pid(const wstring& process_name) {
     wstring targetProcess = process_name;
     DWORD pid = getProcessID(targetProcess);
 

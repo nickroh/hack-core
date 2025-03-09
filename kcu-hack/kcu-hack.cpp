@@ -6,6 +6,8 @@
 #include "kcu_dll.h"
 #include "dll_inject.h"
 #include <direct.h>
+#include "util.h"
+#include "code_patch.h"
 
 #pragma comment(lib, "Kernel32.lib")
 
@@ -16,9 +18,6 @@ void recoil_hack();
 void rifle_ammo_hack();
 void armor_hack();
 void dll_test();
-DWORD check_pid(const wstring& processName);
-uintptr_t get_base_address(DWORD pid, const wstring& moduleName);
-DWORD getProcessID(const wstring& processName);
 
 wstring get_current_directory() {
     char cwd[1024];
@@ -40,7 +39,9 @@ int main() {
         << "Press 'h' to hack hp.\n"
         << "Press 'm' to get base addr.\n"
         << "Press 'a' to hack armor.\n"
-        << "Press 't' to hack rifle ammo.\n";
+        << "Press 't' to hack rifle ammo.\n"
+        << "Press 'r' to remove recoil.\n"
+        << "Press 'i' to inject DLL.\n";
 
     while (true) {
         ch = _getch(); // Get character input without pressing Enter
@@ -82,6 +83,9 @@ int main() {
         else if (ch == 't') {
             rifle_ammo_hack();
         }
+        else if (ch == 'r') {
+            code_patch();
+        }
     }
     return 0;
 }
@@ -122,6 +126,10 @@ void hp_hack() {
 
     // print some message 그래야 보기좋음 ㅇㅇ
     cout << "HP changed to 300 successfully " << "\n";
+}
+
+void instruction_patch() {
+
 }
 
 // TODO: implement RECOIL HACK

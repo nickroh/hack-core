@@ -43,4 +43,10 @@ namespace Offsets {
     constexpr uintptr_t Health = 0xEC;
     constexpr uintptr_t Armor = 0xF0;
     constexpr uintptr_t PlayerName = 0x205;
+
+    constexpr uintptr_t RecoilASMADDR = 0xC2EC3;
+
+    // RECOIL PATTERN
+    //constexpr uintptr_t 
+    //F3 0F 11 56 38
 }

@@ -83,3 +83,11 @@ DWORD WaitForSingleObject(
 
 https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject
 
+
+
+write ammo: 004c73ef
+
+view_y_angle : *(ac_client + 0x0017e0a8) + 0x38 (offset)
+
+
+
