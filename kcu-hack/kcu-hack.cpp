@@ -31,64 +31,64 @@ wstring get_current_directory() {
     }
 }
 
-int main() {
-    char ch;
-    cout << "Press 'q' to print 'Welcome message'.\n"
-        << "Press 'g' to get pid.\n"
-        << "Press '0' to quit.\n"
-        << "Press 'h' to hack hp.\n"
-        << "Press 'm' to get base addr.\n"
-        << "Press 'a' to hack armor.\n"
-        << "Press 't' to hack rifle ammo.\n"
-        << "Press 'r' to remove recoil.\n"
-        << "Press 'i' to inject DLL.\n";
-
-    while (true) {
-        ch = _getch(); // Get character input without pressing Enter
-
-        if (ch == '0') {
-            cout << "Exiting...\n";
-            break;
-        }
-        else if (ch == 'q') {
-            cout << "NUTRIA CHEAT ACTIAVTED!!\n";
-        }
-        else if (ch == 'g') {
-            wstring targetProcess = L"ac_client.exe";
-            DWORD pid = check_pid(targetProcess);
-        }
-        else if (ch == 'm') {
-            wstring targetProcess = L"ac_client.exe";
-            DWORD pid = check_pid(targetProcess);
-            uintptr_t baseAddress = get_base_address(pid, targetProcess);
-            cout << "Base address for ac_client.exe 0x" << hex << baseAddress << "\n";
-        }
-        else if (ch == 'i') {
-            wstring targetProcess = L"Notepad.exe"; // 메모장에 인젝트
-            DWORD pid = check_pid(targetProcess);
-            cout << "TESTING DLL INJECTION!\n";
-
-            wstring dll_name = get_current_directory() + L"\\kcu_dll.dll";
-            wcout << dll_name << "\n";
-
-            dll_injection(pid, dll_name);
-
-        }
-        else if (ch == 'h') {
-            hp_hack();
-        }
-        else if (ch == 'a') {
-            armor_hack();
-        }
-        else if (ch == 't') {
-            rifle_ammo_hack();
-        }
-        else if (ch == 'r') {
-            code_patch();
-        }
-    }
-    return 0;
-}
+//int main() {
+//    char ch;
+//    cout << "Press 'q' to print 'Welcome message'.\n"
+//        << "Press 'g' to get pid.\n"
+//        << "Press '0' to quit.\n"
+//        << "Press 'h' to hack hp.\n"
+//        << "Press 'm' to get base addr.\n"
+//        << "Press 'a' to hack armor.\n"
+//        << "Press 't' to hack rifle ammo.\n"
+//        << "Press 'r' to remove recoil.\n"
+//        << "Press 'i' to inject DLL.\n";
+//
+//    while (true) {
+//        ch = _getch(); // Get character input without pressing Enter
+//
+//        if (ch == '0') {
+//            cout << "Exiting...\n";
+//            break;
+//        }
+//        else if (ch == 'q') {
+//            cout << "NUTRIA CHEAT ACTIAVTED!!\n";
+//        }
+//        else if (ch == 'g') {
+//            wstring targetProcess = L"ac_client.exe";
+//            DWORD pid = check_pid(targetProcess);
+//        }
+//        else if (ch == 'm') {
+//            wstring targetProcess = L"ac_client.exe";
+//            DWORD pid = check_pid(targetProcess);
+//            uintptr_t baseAddress = get_base_address(pid, targetProcess);
+//            cout << "Base address for ac_client.exe 0x" << hex << baseAddress << "\n";
+//        }
+//        else if (ch == 'i') {
+//            wstring targetProcess = L"Notepad.exe"; // 메모장에 인젝트
+//            DWORD pid = check_pid(targetProcess);
+//            cout << "TESTING DLL INJECTION!\n";
+//
+//            wstring dll_name = get_current_directory() + L"\\kcu_dll.dll";
+//            wcout << dll_name << "\n";
+//
+//            dll_injection(pid, dll_name);
+//
+//        }
+//        else if (ch == 'h') {
+//            hp_hack();
+//        }
+//        else if (ch == 'a') {
+//            armor_hack();
+//        }
+//        else if (ch == 't') {
+//            rifle_ammo_hack();
+//        }
+//        else if (ch == 'r') {
+//            code_patch(1);
+//        }
+//    }
+//    return 0;
+//}
 
 void dll_test() {
     PrintComment();

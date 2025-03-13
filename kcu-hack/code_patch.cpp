@@ -7,9 +7,7 @@
 
 using namespace std;
 
-static bool on = false;
-
-void code_patch() {
+void code_patch(int option = 0) {
     uintptr_t y_recoil_addr = 0; // var that stores address of player
     char opcode[] = "\x90\x90\x90\x90\x90";
     char original[] = "\xF3\x0F\x11\x56\x38";
@@ -24,7 +22,7 @@ void code_patch() {
     y_recoil_addr = baseAddress + Offsets::RecoilASMADDR;
 
 
-    if (on) {
+    if (option) {
         WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &original, sizeof(char) * 5, NULL);
     }
     else {
@@ -32,7 +30,5 @@ void code_patch() {
     }
     
 
-    on = !on;
-    // print some message 그래야 보기좋음 ㅇㅇ
     cout << "removed y recoil" << "\n";
 }

@@ -27,6 +27,9 @@
     <ClCompile Include="code_patch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="hack_api.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kcu_dll.h">

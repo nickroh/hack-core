@@ -6,6 +6,6 @@
 #include <windows.h>
 #include <string>
 
-void code_patch();
+void code_patch(int);
 
 #endif // CODE_PATCH_H
