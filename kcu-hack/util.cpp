@@ -45,8 +45,8 @@ DWORD check_pid(const wstring& process_name) {
     }
 }
 
-uintptr_t get_base_address(DWORD pid, const wstring& moduleName) {
-    uintptr_t baseAddress = 0;
+uint32_t get_base_address(DWORD pid, const wstring& moduleName) {
+    uint32_t baseAddress = 0;
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
     if (hSnapshot == INVALID_HANDLE_VALUE) {
         cerr << "Failed to create module snapshot." << endl;
@@ -59,7 +59,7 @@ uintptr_t get_base_address(DWORD pid, const wstring& moduleName) {
     if (Module32First(hSnapshot, &me32)) {
         do {
             if (moduleName == me32.szModule) {
-                baseAddress = (uintptr_t)me32.modBaseAddr;
+                baseAddress = (uint32_t)me32.modBaseAddr;
                 break;
             }
         } while (Module32Next(hSnapshot, &me32));

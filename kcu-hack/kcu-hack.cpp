@@ -60,7 +60,7 @@ wstring get_current_directory() {
 //        else if (ch == 'm') {
 //            wstring targetProcess = L"ac_client.exe";
 //            DWORD pid = check_pid(targetProcess);
-//            uintptr_t baseAddress = get_base_address(pid, targetProcess);
+//            uint32_t_t baseAddress = get_base_address(pid, targetProcess);
 //            cout << "Base address for ac_client.exe 0x" << hex << baseAddress << "\n";
 //        }
 //        else if (ch == 'i') {
@@ -90,33 +90,30 @@ wstring get_current_directory() {
 //    return 0;
 //}
 
-void dll_test() {
-    PrintComment();
-}
 
 // method that changes hp value
 void hp_hack() {
-    uintptr_t playerAddress = 0; // var that stores address of player
+    uint32_t playerAddress = 0; // var that stores address of player
         
     // getting process info
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
     
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
     // get the address of pointer pointing player address
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
 
     // read the value of pointer
     ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
     // calculate address of hp based on offset
-    uintptr_t hp = playerAddress + Offsets::Health;
+    uint32_t hp = playerAddress + Offsets::Health;
 ;
     cout << std::hex << playerAddress << "\n";
     cout << std::hex << hp << "\n";
-    cout << sizeof(uintptr_t) << "\n";
+    cout << sizeof(uint32_t) << "\n";
     cout << "player addr 0x" << std::hex <<  playerAddress << "\n";
     // hp to set
     int bugHp = 300;
@@ -139,23 +136,23 @@ void recoil_hack() {
 
 // TODO: implement ammo HACK
 void rifle_ammo_hack() {
-    uintptr_t playerAddress = 0; // var that stores address of player
+    uint32_t playerAddress = 0; // var that stores address of player
 
     // getting process info
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
 
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
     // get the address of pointer pointing player address
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
 
     // read the value of pointer
     ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
     // calculate address of assualt rifle ammo based on offset
-    uintptr_t ara = playerAddress + Offsets::AssaultRifleAmmo;
+    uint32_t ara = playerAddress + Offsets::AssaultRifleAmmo;
     cout << "player addr" << std::hex << playerAddress << "\n";
     // armor to set
     int bugAmmo = 300;
@@ -169,23 +166,23 @@ void rifle_ammo_hack() {
 
 // TODO: implement armor HACK
 void armor_hack() {
-    uintptr_t playerAddress = 0; // var that stores address of player
+    uint32_t playerAddress = 0; // var that stores address of player
 
     // getting process info
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
 
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
     // get the address of pointer pointing player address
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
 
     // read the value of pointer
     ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
     // calculate address of armor based on offset
-    uintptr_t armor = playerAddress + Offsets::Armor;
+    uint32_t armor = playerAddress + Offsets::Armor;
     cout << "player addr" << std::hex << playerAddress << "\n";
     // armor to set
     int bugArmor = 300;

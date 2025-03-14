@@ -12,16 +12,15 @@
 
 using namespace std;
 
-// Function declarations
+//// Function declarations
 extern "C" __declspec(dllexport) void dll_hp_hack(int input);
 extern "C" __declspec(dllexport) void dll_recoil_hack(int option);
 extern "C" __declspec(dllexport) void dll_rifle_ammo_hack(int input);
 extern "C" __declspec(dllexport) void dll_armor_hack(int input);
-extern "C" __declspec(dllexport) void dll_test();
 extern "C" __declspec(dllexport) bool dll_check_ac();
 
 
-// DLL Entry Point
+//// DLL Entry Point
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
@@ -50,17 +49,17 @@ bool dll_check_ac() {
 }
 
 void dll_hp_hack(int input = 100) {
-    uintptr_t playerAddress = 0;
+    uint32_t playerAddress = 0;
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
 
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
     ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
-    uintptr_t hp = playerAddress + Offsets::Health;
+    uint32_t hp = playerAddress + Offsets::Health;
 
     int bugHp = input;
     WriteProcessMemory(TargetProcess, (BYTE*)(hp), &bugHp, sizeof(int), NULL);
@@ -73,17 +72,17 @@ void dll_recoil_hack(int option = 1) {
 }
 
 void dll_rifle_ammo_hack(int input = 30) {
-    uintptr_t playerAddress = 0;
+    uint32_t playerAddress = 0;
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
 
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
     ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
-    uintptr_t ara = playerAddress + Offsets::AssaultRifleAmmo;
+    uint32_t ara = playerAddress + Offsets::AssaultRifleAmmo;
     int bugAmmo = input;
 
     WriteProcessMemory(TargetProcess, (BYTE*)(ara), &bugAmmo, sizeof(int), NULL);
@@ -92,17 +91,17 @@ void dll_rifle_ammo_hack(int input = 30) {
 }
 
 void dll_armor_hack(int input = 50) {
-    uintptr_t playerAddress = 0;
+    uint32_t playerAddress = 0;
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
 
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
     ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
-    uintptr_t armor = playerAddress + Offsets::Armor;
+    uint32_t armor = playerAddress + Offsets::Armor;
     int bugArmor = input;
 
     WriteProcessMemory(TargetProcess, (BYTE*)(armor), &bugArmor, sizeof(int), NULL);
@@ -110,6 +109,3 @@ void dll_armor_hack(int input = 50) {
     cout << "Armor changed to 300 successfully " << "\n";
 }
 
-void dll_test() {
-    PrintComment();
-}

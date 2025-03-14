@@ -8,14 +8,14 @@
 using namespace std;
 
 void code_patch(int option = 0) {
-    uintptr_t y_recoil_addr = 0; // var that stores address of player
+    uint32_t y_recoil_addr = 0; // var that stores address of player
     char opcode[] = "\x90\x90\x90\x90\x90";
     char original[] = "\xF3\x0F\x11\x56\x38";
     // getting process info
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
 
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
     // get the address of pointer pointing player address
