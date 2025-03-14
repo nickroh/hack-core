@@ -3,6 +3,11 @@
 #include <windows.h>
 #include <tlhelp32.h> // Never include Win32 headers before <windows.h>
 #include "constants.h"
+#include "kcu_dll.h"
+#include "dll_inject.h"
+#include <direct.h>
+#include "util.h"
+#include "code_patch.h"
 
 #pragma comment(lib, "Kernel32.lib")
 
@@ -10,131 +15,106 @@ using namespace std;
 
 void hp_hack();
 void recoil_hack();
-void curr_ammo_hack();
-void reserved_ammo_hack();
-void speed_hack();
-DWORD check_pid();
-uintptr_t get_base_address(DWORD pid, const wstring& moduleName);
-DWORD getProcessID(const wstring& processName);
+void rifle_ammo_hack();
+void armor_hack();
+void dll_test();
 
-int main() {
-    char ch;
-    cout << "Press 'q' to print 'Welcome message'.\n"
-        << "Press 'g' to get pid.\n"
-        << "Press '0' to quit.\n"
-        << "Press 'h' to hack hp.\n"
-        << "Press 'm' to get base addr.\n";
-
-    while (true) {
-        ch = _getch(); // Get character input without pressing Enter
-
-        if (ch == '0') {
-            cout << "Exiting...\n";
-            break;
-        }
-        else if (ch == 'q') {
-            cout << "NUTRIA CHEAT ACTIAVTED!!\n";
-        }
-        else if (ch == 'g') {
-            DWORD pid = check_pid();
-        }
-        else if (ch == 'm') {
-            DWORD pid = check_pid();
-            wstring targetProcess = L"ac_client.exe";
-            uintptr_t baseAddress = get_base_address(pid, targetProcess);
-            cout << "Base address for ac_client.exe 0x" << std::hex << baseAddress << "\n";
-        }
-        else if (ch == 'h') {
-            hp_hack();
-        }
-
-    }
-
-    return 0;
-}
-
-
-DWORD getProcessID(const wstring& processName) {
-    DWORD pid = 0;
-    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnapshot == INVALID_HANDLE_VALUE) {
-        cerr << "Failed to create snapshot." << endl;
-        return 0;
-    }
-
-    PROCESSENTRY32 pe32;
-    pe32.dwSize = sizeof(PROCESSENTRY32);
-
-    if (Process32First(hSnapshot, &pe32)) {
-        do {
-            if (processName == pe32.szExeFile) {
-                pid = pe32.th32ProcessID;
-                break;
-            }
-        } while (Process32Next(hSnapshot, &pe32));
-    }
-
-    CloseHandle(hSnapshot);
-    return pid;
-}
-
-DWORD check_pid() {
-    wstring targetProcess = L"ac_client.exe";
-    DWORD pid = getProcessID(targetProcess);
-
-    if (pid) {
-        wcout << "Process " << targetProcess << " found with PID: " << pid << endl;
-        return pid;
+wstring get_current_directory() {
+    char cwd[1024];
+    if (_getcwd(cwd, sizeof(cwd)) != NULL) {
+        // Convert char[] (cwd) to std::wstring
+        return std::wstring(cwd, cwd + strlen(cwd));
     }
     else {
-        wcout << "Process " << targetProcess << " not found." << endl;
-        return 0;
+        // Error getting current directory
+        return L"Error getting current directory";
     }
 }
 
-uintptr_t get_base_address(DWORD pid, const wstring& moduleName) {
-    uintptr_t baseAddress = 0;
-    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
-    if (hSnapshot == INVALID_HANDLE_VALUE) {
-        cerr << "Failed to create module snapshot." << endl;
-        return 0;
-    }
+//int main() {
+//    char ch;
+//    cout << "Press 'q' to print 'Welcome message'.\n"
+//        << "Press 'g' to get pid.\n"
+//        << "Press '0' to quit.\n"
+//        << "Press 'h' to hack hp.\n"
+//        << "Press 'm' to get base addr.\n"
+//        << "Press 'a' to hack armor.\n"
+//        << "Press 't' to hack rifle ammo.\n"
+//        << "Press 'r' to remove recoil.\n"
+//        << "Press 'i' to inject DLL.\n";
+//
+//    while (true) {
+//        ch = _getch(); // Get character input without pressing Enter
+//
+//        if (ch == '0') {
+//            cout << "Exiting...\n";
+//            break;
+//        }
+//        else if (ch == 'q') {
+//            cout << "NUTRIA CHEAT ACTIAVTED!!\n";
+//        }
+//        else if (ch == 'g') {
+//            wstring targetProcess = L"ac_client.exe";
+//            DWORD pid = check_pid(targetProcess);
+//        }
+//        else if (ch == 'm') {
+//            wstring targetProcess = L"ac_client.exe";
+//            DWORD pid = check_pid(targetProcess);
+//            uint32_t_t baseAddress = get_base_address(pid, targetProcess);
+//            cout << "Base address for ac_client.exe 0x" << hex << baseAddress << "\n";
+//        }
+//        else if (ch == 'i') {
+//            wstring targetProcess = L"Notepad.exe"; // 메모장에 인젝트
+//            DWORD pid = check_pid(targetProcess);
+//            cout << "TESTING DLL INJECTION!\n";
+//
+//            wstring dll_name = get_current_directory() + L"\\kcu_dll.dll";
+//            wcout << dll_name << "\n";
+//
+//            dll_injection(pid, dll_name);
+//
+//        }
+//        else if (ch == 'h') {
+//            hp_hack();
+//        }
+//        else if (ch == 'a') {
+//            armor_hack();
+//        }
+//        else if (ch == 't') {
+//            rifle_ammo_hack();
+//        }
+//        else if (ch == 'r') {
+//            code_patch(1);
+//        }
+//    }
+//    return 0;
+//}
 
-    MODULEENTRY32 me32;
-    me32.dwSize = sizeof(MODULEENTRY32);
-
-    if (Module32First(hSnapshot, &me32)) {
-        do {
-            if (moduleName == me32.szModule) {
-                baseAddress = (uintptr_t)me32.modBaseAddr;
-                break;
-            }
-        } while (Module32Next(hSnapshot, &me32));
-    }
-
-    CloseHandle(hSnapshot);
-    return baseAddress;
-}
 
 // method that changes hp value
 void hp_hack() {
-    uintptr_t playerAddress = 0; // var that stores address of player
+    uint32_t playerAddress = 0; // var that stores address of player
         
     // getting process info
-    DWORD pid = check_pid(); 
     wstring targetProcess = L"ac_client.exe";
-    uintptr_t baseAddress = get_base_address(pid, targetProcess);
+    DWORD pid = check_pid(targetProcess);
+    
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
     HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
 
     // get the address of pointer pointing player address
-    uintptr_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
 
     // read the value of pointer
-    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(uintptr_t), 0);
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
 
     // calculate address of hp based on offset
-    uintptr_t hp = playerAddress + Offsets::Health;
-    cout << "player addr" << std::hex <<  playerAddress << "\n";
+    uint32_t hp = playerAddress + Offsets::Health;
+;
+    cout << std::hex << playerAddress << "\n";
+    cout << std::hex << hp << "\n";
+    cout << sizeof(uint32_t) << "\n";
+    cout << "player addr 0x" << std::hex <<  playerAddress << "\n";
     // hp to set
     int bugHp = 300;
 
@@ -145,19 +125,73 @@ void hp_hack() {
     cout << "HP changed to 300 successfully " << "\n";
 }
 
+void instruction_patch() {
+
+}
+
 // TODO: implement RECOIL HACK
 void recoil_hack() {
 
 }
 
 // TODO: implement ammo HACK
-void curr_ammo_hack() {
+void rifle_ammo_hack() {
+    uint32_t playerAddress = 0; // var that stores address of player
 
+    // getting process info
+    wstring targetProcess = L"ac_client.exe";
+    DWORD pid = check_pid(targetProcess);
+
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
+    HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
+
+    // get the address of pointer pointing player address
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+
+    // read the value of pointer
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
+
+    // calculate address of assualt rifle ammo based on offset
+    uint32_t ara = playerAddress + Offsets::AssaultRifleAmmo;
+    cout << "player addr" << std::hex << playerAddress << "\n";
+    // armor to set
+    int bugAmmo = 300;
+
+    // set assualt rifle ammo to changed armor
+    WriteProcessMemory(TargetProcess, (BYTE*)(ara), &bugAmmo, sizeof(int), NULL);
+
+    // print some message
+    cout << "Assault Rifle Ammo changed to 300 successfully " << "\n";
 }
 
-// TODO: implement ammo HACK
-void reserved_ammo_hack() {
+// TODO: implement armor HACK
+void armor_hack() {
+    uint32_t playerAddress = 0; // var that stores address of player
 
+    // getting process info
+    wstring targetProcess = L"ac_client.exe";
+    DWORD pid = check_pid(targetProcess);
+
+    uint32_t baseAddress = get_base_address(pid, targetProcess);
+    HANDLE TargetProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, pid);
+
+    // get the address of pointer pointing player address
+    uint32_t playerEntitiy = baseAddress + Offsets::LocalPlayer;
+
+    // read the value of pointer
+    ReadProcessMemory(TargetProcess, (void*)(playerEntitiy), &playerAddress, sizeof(int), 0);
+
+    // calculate address of armor based on offset
+    uint32_t armor = playerAddress + Offsets::Armor;
+    cout << "player addr" << std::hex << playerAddress << "\n";
+    // armor to set
+    int bugArmor = 300;
+
+    // set armor to changed armor
+    WriteProcessMemory(TargetProcess, (BYTE*)(armor), &bugArmor, sizeof(int), NULL);
+
+    // print some message
+    cout << "Armor changed to 300 successfully " << "\n";
 }
 
 
