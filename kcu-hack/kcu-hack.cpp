@@ -3,8 +3,6 @@
 #include <windows.h>
 #include <tlhelp32.h> // Never include Win32 headers before <windows.h>
 #include "constants.h"
-#include "kcu_dll.h"
-#include "dll_inject.h"
 #include <direct.h>
 #include "util.h"
 #include "code_patch.h"
@@ -60,19 +58,8 @@ wstring get_current_directory() {
 //        else if (ch == 'm') {
 //            wstring targetProcess = L"ac_client.exe";
 //            DWORD pid = check_pid(targetProcess);
-//            uint32_t_t baseAddress = get_base_address(pid, targetProcess);
+//            uint32_t baseAddress = get_base_address(pid, targetProcess);
 //            cout << "Base address for ac_client.exe 0x" << hex << baseAddress << "\n";
-//        }
-//        else if (ch == 'i') {
-//            wstring targetProcess = L"Notepad.exe"; // 메모장에 인젝트
-//            DWORD pid = check_pid(targetProcess);
-//            cout << "TESTING DLL INJECTION!\n";
-//
-//            wstring dll_name = get_current_directory() + L"\\kcu_dll.dll";
-//            wcout << dll_name << "\n";
-//
-//            dll_injection(pid, dll_name);
-//
 //        }
 //        else if (ch == 'h') {
 //            hp_hack();

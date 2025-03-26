@@ -2,8 +2,6 @@
 #include <windows.h>
 #include <tlhelp32.h> 
 #include "constants.h"
-#include "kcu_dll.h"
-#include "dll_inject.h"
 #include <direct.h>
 #include "util.h"
 #include "code_patch.h"
@@ -12,13 +10,14 @@
 
 using namespace std;
 
-//// Function declarations
-extern "C" __declspec(dllexport) void dll_hp_hack(int input);
-extern "C" __declspec(dllexport) void dll_recoil_hack(int option);
-extern "C" __declspec(dllexport) void dll_rifle_ammo_hack(int input);
-extern "C" __declspec(dllexport) void dll_armor_hack(int input);
-extern "C" __declspec(dllexport) bool dll_check_ac();
-
+DWORD WINAPI ShowMessageBoxLoop(LPVOID lpParam) {
+    while (true) {
+        cout << "INJECTED DLL" << endl;
+        MessageBox(NULL, L"Injected DLL is running!", L"Info", MB_OK);
+        Sleep(5000);  // Wait for 5 seconds before showing again
+    }
+    return 0;
+}
 
 //// DLL Entry Point
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
@@ -27,9 +26,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
         // The DLL is loaded, and we can initialize resources, if needed.
         // You could call any hack functions from here, or let the user trigger them through other means
         cout << "DLL Injected successfully!" << endl;
-
+        CreateThread(NULL, 0, ShowMessageBoxLoop, NULL, 0, NULL);
         // Example: Automatically perform HP hack when DLL is loaded
-        dll_hp_hack(100);
     }
 
     return TRUE; // Successfully loaded

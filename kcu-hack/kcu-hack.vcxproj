@@ -146,7 +146,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="code_patch.cpp" />
-    <ClCompile Include="dll_inject.cpp" />
     <ClCompile Include="kcu-hack.cpp" />
     <ClCompile Include="hack_api.cpp" />
     <ClCompile Include="util.cpp" />
@@ -154,8 +153,6 @@
   <ItemGroup>
     <ClInclude Include="code_patch.h" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="dll_inject.h" />
-    <ClInclude Include="kcu_dll.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
