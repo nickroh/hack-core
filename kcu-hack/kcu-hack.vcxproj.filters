@@ -5,13 +5,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="header_files">
+      <UniqueIdentifier>{d22b2f81-9ffb-44c6-981d-ae58b8776b94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,27 +26,30 @@
     <ClCompile Include="hack_api.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HackCore.cpp">
+    <ClCompile Include="hack_core.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="constants.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="code_patch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HackCore.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+    <ClCompile Include="receiver.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="bin\kcu_dll.lib">
       <Filter>리소스 파일</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\code_patch.h">
+      <Filter>header_files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\constants.h">
+      <Filter>header_files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hack-core.h">
+      <Filter>header_files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util.h">
+      <Filter>header_files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

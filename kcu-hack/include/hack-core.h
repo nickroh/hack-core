@@ -22,9 +22,11 @@ public:
 
 private:
 
-    uintptr_t baseAddr;
-
     bool initialize();
+    uintptr_t baseAddr;
+    uintptr_t playerEntitiy;
+
+    
 };
 
 #endif // HACKCORE_H#pragma once
