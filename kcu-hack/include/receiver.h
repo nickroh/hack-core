@@ -2,6 +2,8 @@
 #define RECEIVER_H
 
 #include <Windows.h>
+#include "SharedMemory.h"
+#include "hack-core.h"
 
 // HackCore class definition
 class Receiver  {
@@ -15,9 +17,13 @@ public:
     // Public data members (variables)
 
     // Public methods
-
+    void start();
 
 private:
+    SharedMemoryHandler* sh;
+    HackCore* hack;
+    HANDLE fullEvent;
+    HANDLE emptyEvent;
 
     bool initialize();
 };

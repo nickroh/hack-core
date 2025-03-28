@@ -9,8 +9,8 @@
 using namespace std;
 
 Receiver::Receiver() {
-
-	if (!initialize()) {
+    bool result = initialize();
+	if (result) {
 		cout << "initialization failed" << endl;
 	}
 }
@@ -70,5 +70,14 @@ bool Receiver::initialize() {
     sh = new SharedMemoryHandler(_T("NUTRI-IPC"), 0);
 	fullEvent = sh->getFullEvent();
 	emptyEvent = sh->getEmptyEvent();
+
+    if (!hack || !sh || !fullEvent || !emptyEvent) {
+        return false;
+    }
+
+    HANDLE hEventInit = OpenEvent(EVENT_ALL_ACCESS, FALSE, L"COREINIT");
+    SetEvent(hEventInit);
+
+    return true;
 }
 
