@@ -11,11 +11,13 @@
 #define SHAREDMEMORY_API __declspec(dllimport)
 #endif
 
+#pragma pack(push, 1) // Ensure no unexpected padding
 struct SharedMemory {
-    int cmd = -1;
-    int option = -1;
-    bool isMessageSet = false;
+    int32_t cmd = -1;
+    int32_t option = -1;
+    int32_t isMessageSet = 0; // Using int32_t instead of bool to ensure compatibility
 };
+#pragma pack(pop)
 
 class SHAREDMEMORY_API SharedMemoryHandler {
 private:
@@ -24,8 +26,7 @@ private:
     HANDLE hEventEmpty;
     SharedMemory* shm;
     
-    // not goint to use global mutex using CreateMutex since only producer access setMessage and consumer access getMessage
-    std::mutex mutex; 
+    // not goint to use global mutex using CreateMutex since only producer access setMessage and consumer access getMessag
 
     bool isProducer;
     void cleanup();

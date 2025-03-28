@@ -10,7 +10,7 @@ using namespace std;
 
 Receiver::Receiver() {
     bool result = initialize();
-	if (result) {
+	if (!result) {
 		cout << "initialization failed" << endl;
 	}
 }
@@ -26,8 +26,15 @@ Receiver::~Receiver() {
 
 void Receiver::start() {
     bool end = false;
+    cout << "Receiving Loop entered" << endl;
     while (true) {
-        DWORD result = WaitForSingleObject(fullEvent, INFINITE);
+        DWORD result = WaitForSingleObject(fullEvent, INFINITE); // Wait for 10 seconds
+
+        if (result == WAIT_OBJECT_0) {
+            // The event was signaled
+            std::cout << "Event signaled!" << std::endl;
+            // Continue processing as normal
+        }
 
         SharedMemory* sm = sh->getMessage();
 
@@ -63,6 +70,10 @@ void Receiver::start() {
         SetEvent(emptyEvent);
 
     }
+    //for (int i = 0; i < 3; ++i) {
+    //    MessageBox(NULL, L"MSG arrived", L"Info", MB_OK);
+    //    Sleep(3000); // Wait for 3 seconds
+    //}
 }
 
 bool Receiver::initialize() {
@@ -71,7 +82,23 @@ bool Receiver::initialize() {
 	fullEvent = sh->getFullEvent();
 	emptyEvent = sh->getEmptyEvent();
 
-    if (!hack || !sh || !fullEvent || !emptyEvent) {
+    if (!hack) {
+        cout << "Error: hack is null!" << endl;
+        return false;
+    }
+
+    if (!sh) {
+        cout << "Error: SharedMemoryHandler (sh) is null!" << endl;
+        return false;
+    }
+
+    if (!fullEvent) {
+        cout << "Error: fullEvent is null!" << endl;
+        return false;
+    }
+
+    if (!emptyEvent) {
+        cout << "Error: emptyEvent is null!" << endl;
         return false;
     }
 

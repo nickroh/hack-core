@@ -16,7 +16,6 @@ DWORD WINAPI ShowMessageBoxLoop(LPVOID lpParam) {
 
 DWORD WINAPI runReceiver(LPVOID lpParam) {
     Receiver* receiver = new Receiver();
-
     receiver->start();
     return 0;
 }
@@ -28,9 +27,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
         // The DLL is loaded, and we can initialize resources, if needed.
         // You could call any hack functions from here, or let the user trigger them through other means
-        cout << "DLL Injected successfully!" << endl;
-        CreateThread(NULL, 0, runReceiver, NULL, 0, NULL);
-        // Example: Automatically perform HP hack when DLL is loaded
+        HANDLE hThread = CreateThread(NULL, 0, runReceiver, NULL, 0, NULL); // 
+        if (hThread) {
+            CloseHandle(hThread);
+        }
     }
 
     return TRUE; // Successfully loaded
