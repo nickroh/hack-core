@@ -25,8 +25,9 @@ private:
     HANDLE hEventFull;
     HANDLE hEventEmpty;
     SharedMemory* shm;
-    
-    // not goint to use global mutex using CreateMutex since only producer access setMessage and consumer access getMessag
+
+    // not goint to use global mutex using CreateMutex since only producer access setMessage and consumer access getMessage
+    std::mutex mutex;
 
     bool isProducer;
     void cleanup();
