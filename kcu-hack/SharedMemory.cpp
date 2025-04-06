@@ -2,7 +2,7 @@
 #include <iostream>
 #include <tchar.h>
 
-void printEventStatus(HANDLE hEvent, const std::wstring& eventName) {
+void SharedMemoryHandler::printEventStatus(HANDLE hEvent, const std::wstring& eventName) {
     DWORD status = WaitForSingleObject(hEvent, 0);
 
     if (status == WAIT_OBJECT_0) {
@@ -73,6 +73,7 @@ bool SharedMemoryHandler::setMessage(int input, int option) {
     shm->option = option;
     shm->isMessageSet = true;
 
+    SetEvent(hEventFull);  // Notify consumer that message is available
     return true;
 }
 
@@ -179,7 +180,7 @@ void SharedMemoryHandler::initConsumer(const TCHAR* shmName) {
     shm = (SharedMemory*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(SharedMemory));
     if (!shm) {
         std::cerr << "Failed to map shared memory in consumer. Error: " << GetLastError() << std::endl;
-        CloseHandle(hMapFile);  // Only close hMapFile, don't call cleanup()
+        cleanup();
         exit(1);
     }
 }
