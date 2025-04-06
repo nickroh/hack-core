@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 Receiver::Receiver() {
     bool result = initialize();
 	if (!result) {
@@ -41,7 +42,7 @@ void Receiver::start() {
         int cmd = sm->cmd;
         int option = sm->option;
 
-        cout << "SetMSG with cmd: " << cmd << ", option: " << option << endl;
+        cout << "MSG with cmd: " << cmd << ", option: " << option << endl;
 
         switch (cmd)
         {

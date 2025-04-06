@@ -18,14 +18,17 @@ public:
 
     // Public methods
     void start();
+    //void setModule(LPVOID mod);
 
 private:
     SharedMemoryHandler* sh;
     HackCore* hack;
     HANDLE fullEvent;
     HANDLE emptyEvent;
+    HMODULE dll;
 
     bool initialize();
+    //void unload();
 };
 
 #endif // HACKCORE_H#pragma once
