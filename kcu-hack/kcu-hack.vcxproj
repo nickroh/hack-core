@@ -162,6 +162,7 @@
     <ClCompile Include="code_patch.cpp" />
     <ClCompile Include="hack_core.cpp" />
     <ClCompile Include="hack_api.cpp" />
+    <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="receiver.cpp" />
     <ClCompile Include="SharedMemory.cpp" />
     <ClCompile Include="util.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="include\hack-core.h" />
     <ClInclude Include="include\SharedMemory.h" />
     <ClInclude Include="include\util.h" />
+    <ClInclude Include="OpenGL.h" />
     <ClInclude Include="receiver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

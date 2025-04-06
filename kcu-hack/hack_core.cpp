@@ -66,6 +66,8 @@ void HackCore::setAmmo(int newAmmo) {
     *ammo = newAmmo;
 }
 
+
+
 // Set Recoil method
 void HackCore::setRecoil(int newRecoil) {
     code_patch(newRecoil);
