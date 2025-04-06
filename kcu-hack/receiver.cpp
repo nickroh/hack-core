@@ -46,18 +46,18 @@ void Receiver::start() {
 
         switch (cmd)
         {
-            //case 1:  // hp hack
-            //    hack->setHP(option);
-            //    break;
-            //case 2:  // ammo hack
-            //    hack->setAmmo(option);
-            //    break;
-            //case 3:
-            //    hack->setArmor(option);
-            //    break;
-            //case 4:
-            //    hack->setRecoil(option);
-            //    break;
+            case 1:  // hp hack
+                hack->setHP(option);
+                break;
+            case 2:  // ammo hack
+                hack->setAmmo(option);
+                break;
+            case 3:
+                hack->setArmor(option);
+                break;
+            case 4:
+                hack->setRecoil(option);
+                break;
             case 0:
                 end = true;
                 break;

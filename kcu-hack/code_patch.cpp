@@ -23,9 +23,11 @@ void code_patch(int option = 0) {
 
 
     if (option) {
+        //char* y_recoil_addr = original;
         WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &original, sizeof(char) * 5, NULL);
     }
     else {
+        //char* y_recoil_addr = opcode;
         WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &opcode, sizeof(char) * 5, NULL);
     }
     

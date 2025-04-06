@@ -67,8 +67,25 @@ void HackCore::setAmmo(int newAmmo) {
 }
 
 
-
 // Set Recoil method
 void HackCore::setRecoil(int newRecoil) {
-    code_patch(newRecoil);
+    char opcode[] = "\x90\x90\x90\x90\x90"; // sizeof(opcode) = 6 due to null terminator
+    char original[] = "\xF3\x0F\x11\x56\x38";
+    uintptr_t y_recoil_addr = baseAddr + Offsets::RecoilASMADDR;
+
+    DWORD oldProtect;
+    if (VirtualProtect((LPVOID)y_recoil_addr, 5, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+        if (newRecoil) {
+            memcpy((void*)y_recoil_addr, original, 5);
+        }
+        else {
+            memcpy((void*)y_recoil_addr, opcode, 5);
+        }
+
+        VirtualProtect((LPVOID)y_recoil_addr, 5, oldProtect, &oldProtect);
+    }
+    else {
+        std::cerr << "VirtualProtect failed: " << GetLastError() << std::endl;
+    }
+
 }
