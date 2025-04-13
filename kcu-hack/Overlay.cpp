@@ -1,11 +1,10 @@
 // Overlay.cpp
 #include "Overlay.h"
+#include "OpenGL.h"
 #include "geometry.h"
 #include <iostream>
 #include <algorithm>
 #include <windows.h>
-
-
 
 Overlay::Overlay() {
     std::cout << "Overlay created." << std::endl;

@@ -61,9 +61,6 @@
     <ClInclude Include="include\SharedMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenGL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\receiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,10 +70,16 @@
     <ClInclude Include="include\Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="geometry.h">
+    <ClInclude Include="ESP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ESP.h">
+    <ClInclude Include="def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
