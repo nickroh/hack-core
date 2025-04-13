@@ -11,6 +11,8 @@ public:
     Overlay();   // Constructor
     ~Overlay();  // Destructor
 
+    bool EnableBoxOverlay();
+
 private:
 
     // converts in game 3d coordinate to monitor 2d coordinate

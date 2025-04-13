@@ -15,6 +15,7 @@ public:
 
         bool HookFunction(BYTE* src, BYTE* dst, const size_t len);
         BYTE* CreateTrampoline(BYTE* src, BYTE* dst, const size_t len);
+        bool UnhookFunction(BYTE* src, BYTE* originalBytes, size_t len);
 
     private:
 
