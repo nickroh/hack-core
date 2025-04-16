@@ -58,6 +58,8 @@ void Receiver::start() {
             case 4:
                 hack->setRecoil(option);
                 break;
+            case 5:
+                hack->setRect(option);
             case 0:
                 end = true;
                 break;

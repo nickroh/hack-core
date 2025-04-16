@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "hack-core.h"
 #include "code_patch.h"
+#include "Overlay.h"
 
 // Default constructor
 HackCore::HackCore() {
@@ -17,6 +18,11 @@ HackCore::~HackCore() {
 }
 
 bool HackCore::initialize() {
+    overlay = new Overlay();
+    if (!overlay) {
+        std::cout << "Overlay init failed.\n";
+    }
+
     HMODULE hModule = GetModuleHandle(L"ac_client.exe");
 
     if (hModule) {
@@ -88,4 +94,8 @@ void HackCore::setRecoil(int newRecoil) {
         std::cerr << "VirtualProtect failed: " << GetLastError() << std::endl;
     }
 
+}
+
+void HackCore::setRect(int nothing) {
+    overlay->SetBoxOverlay(1);
 }

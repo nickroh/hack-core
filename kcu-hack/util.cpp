@@ -2,10 +2,18 @@
 #include <conio.h> // For _getch()
 #include <windows.h>
 #include <tlhelp32.h> // Never include Win32 headers before <windows.h>
+#include <fstream>
 #include "constants.h"
 #include "util.h"
 
 using namespace std;
+
+void Log(const string& message) {
+    ofstream logFile("C:\\Users\\roh51\\Desktop\\overlay_log.txt", ios_base::app); // Open in append mode
+    if (logFile.is_open()) {
+        logFile << message << endl;
+    }
+}
 
 DWORD getProcessID(const wstring& processName) {
     DWORD pid = 0;

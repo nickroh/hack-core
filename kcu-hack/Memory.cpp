@@ -36,15 +36,23 @@ bool Memory::Trampoline::HookFunction(BYTE* src, BYTE* dst, const size_t len) {
 }
 
 BYTE* Memory::Trampoline::CreateTrampoline(BYTE* src, BYTE* dst, const size_t len) {
-    BYTE* gateway = (BYTE*)VirtualAlloc(0, len + 5, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    if (len < 5) return nullptr;
 
-    memcpy(gateway, src, len); // 원본 함수 코드 복사
+    // Allocate executable memory for the trampoline (gateway)
+    BYTE* gateway = (BYTE*)VirtualAlloc(nullptr, len + 5, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    if (!gateway) return nullptr;
 
-    uintptr_t jumpAddr = (uintptr_t)(src + len - gateway - 5);
+    // Copy the original bytes into the gateway
+    memcpy(gateway, src, len);
+
+    // Add a jump from gateway back to the original function after the overwritten bytes
+    uintptr_t jumpBackAddr = (uintptr_t)(src + len - gateway - 5);
     gateway[len] = 0xE9;
-    *(uintptr_t*)(gateway + len + 1) = jumpAddr;
+    *(uintptr_t*)(gateway + len + 1) = jumpBackAddr;
 
-    HookFunction(src, dst, len);
+    // Hook the original function to jump to our detour (dst)
+    if (!HookFunction(src, dst, len)) return nullptr;
+
     return gateway;
 }
 

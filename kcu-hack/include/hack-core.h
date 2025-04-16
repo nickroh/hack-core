@@ -2,6 +2,7 @@
 #define HACKCORE_H
 
 #include <Windows.h>
+#include <Overlay.h>
 
 // HackCore class definition
 class HackCore {
@@ -19,6 +20,7 @@ public:
     void setArmor(int newArmor);      // Set Armor
     void setAmmo(int newAmmo);        // Set Ammo
     void setRecoil(int newRecoil);    // Set Recoil
+    void setRect(int nothing);
 
 private:
 
@@ -26,6 +28,7 @@ private:
     uintptr_t baseAddr;
     uintptr_t playerEntitiy;
 
+    Overlay* overlay;
     
 };
 
