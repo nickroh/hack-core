@@ -17,9 +17,10 @@ public:
 
     bool SetBoxOverlay(bool enable);
 
-    static OpenGL openGL;
+    using tSwapBuffers = BOOL(WINAPI*)(HDC);
 private:
     Memory::Trampoline* trampoline;
+    OpenGL* openGL;
 
     HMODULE hOpenGL; // opengl module
     void* target; // targetfunction pointer
@@ -31,18 +32,8 @@ private:
     // converts in game 3d coordinate to monitor 2d coordinate
     bool WorldToScreen(vec pos, vec& screen, float matrix[16], int windowWidth, int windowHeight);
 
-    using tSwapBuffers = BOOL(WINAPI*)(HDC);
-    static tSwapBuffers oSwapBuffers;
-
     static void drawRect(Rect rect, int color);
-    static BOOL WINAPI hkSwapBuffers(HDC hdc) {
-        OpenGL openGL;
-        Rect rect = Rect(100, 100, 20, 20);
-        openGL.SetupOrtho();
-        openGL.DrawRect(rect, openGL.GREEN);
-        openGL.RestoreGL();
-        return oSwapBuffers(hdc);
-    }
+
 };
 
 

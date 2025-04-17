@@ -19,9 +19,6 @@ HackCore::~HackCore() {
 
 bool HackCore::initialize() {
     overlay = new Overlay();
-    if (!overlay) {
-        std::cout << "Overlay init failed.\n";
-    }
 
     HMODULE hModule = GetModuleHandle(L"ac_client.exe");
 
@@ -32,6 +29,8 @@ bool HackCore::initialize() {
     else {
         return false;
     }
+
+    Log("HACKCORE initialized");
 
     return true;
 }

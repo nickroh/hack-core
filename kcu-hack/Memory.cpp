@@ -1,6 +1,6 @@
 #include "Memory.h"
 #include <iostream>
-#
+#include "util.h"
 
 Memory::Memory() {
     std::cout << "Memory instance created." << std::endl;
@@ -31,28 +31,47 @@ bool Memory::Trampoline::HookFunction(BYTE* src, BYTE* dst, const size_t len) {
     src[0] = 0xE9; // JMP opcode
     *(uintptr_t*)(src + 1) = relAddr;
 
-    VirtualProtect(src, len, curProtection, &curProtection);
+    DWORD temp;
+    VirtualProtect(src, len, curProtection, &temp);
     return true;
 }
 
 BYTE* Memory::Trampoline::CreateTrampoline(BYTE* src, BYTE* dst, const size_t len) {
-    if (len < 5) return nullptr;
+    if (len < 5) {
+        Log("CreateTrampoline failed: len < 5");
+        return nullptr;
+    }
 
-    // Allocate executable memory for the trampoline (gateway)
+    Log("Trampoline setup entered");
+
+    // Allocate memory for trampoline
     BYTE* gateway = (BYTE*)VirtualAlloc(nullptr, len + 5, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-    if (!gateway) return nullptr;
+    if (!gateway) {
+        Log("CreateTrampoline failed: VirtualAlloc returned nullptr");
+        return nullptr;
+    }
 
-    // Copy the original bytes into the gateway
+    Log("Allocated gateway memory");
+
+    // Copy original instructions to trampoline
     memcpy(gateway, src, len);
+    Log("Copied original bytes to gateway");
 
-    // Add a jump from gateway back to the original function after the overwritten bytes
-    uintptr_t jumpBackAddr = (uintptr_t)(src + len - gateway - 5);
-    gateway[len] = 0xE9;
+    // Compute relative jump from end of trampoline back to original function
+    uintptr_t jumpBackAddr = (uintptr_t)((src + len) - (gateway + len + 5));
+
+    gateway[len] = 0xE9; // JMP opcode
     *(uintptr_t*)(gateway + len + 1) = jumpBackAddr;
 
-    // Hook the original function to jump to our detour (dst)
-    if (!HookFunction(src, dst, len)) return nullptr;
+    Log("Wrote jump back from trampoline to original function");
 
+    // Hook the original function
+    if (!HookFunction(src, dst, len)) {
+        Log("CreateTrampoline failed: HookFunction returned false");
+        return nullptr;
+    }
+
+    Log("HookFunction succeeded, trampoline ready");
     return gateway;
 }
 
