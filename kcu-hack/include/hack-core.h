@@ -20,7 +20,7 @@ public:
     void setArmor(int newArmor);      // Set Armor
     void setAmmo(int newAmmo);        // Set Ammo
     void setRecoil(int newRecoil);    // Set Recoil
-    void setRect(int nothing);
+    void setRect(int option);
 
 private:
 

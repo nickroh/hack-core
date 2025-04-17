@@ -68,7 +68,7 @@ bool Overlay::SetBoxOverlay(bool enable) {
 
 
         // Backup original bytes before hooking
-        //memcpy(originalBytes, src, 5);
+        memcpy(originalBytes, target, 5);
 
         Log("initing Trampoline");
         // Create trampoline and store original function pointer

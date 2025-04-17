@@ -95,6 +95,6 @@ void HackCore::setRecoil(int newRecoil) {
 
 }
 
-void HackCore::setRect(int nothing) {
-    overlay->SetBoxOverlay(1);
+void HackCore::setRect(int option) {
+    overlay->SetBoxOverlay(option);
 }
