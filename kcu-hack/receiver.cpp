@@ -59,7 +59,7 @@ void Receiver::start() {
                 hack->setRecoil(option);
                 break;
             case 5:
-                hack->setRect(option);
+                hack->setESP(option);
                 break;
             case 0:
                 end = true;
@@ -72,7 +72,6 @@ void Receiver::start() {
 
         ResetEvent(fullEvent);
         SetEvent(emptyEvent);
-        Log("cleared");
     }
     //for (int i = 0; i < 3; ++i) {
     //    MessageBox(NULL, L"MSG arrived", L"Info", MB_OK);

@@ -14,15 +14,18 @@ public:
 
     Overlay();   // Constructor
     ~Overlay();  // Destructor
+    HMODULE ac_client;
 
-    bool SetBoxOverlay(bool enable);
+    void testESP();
 
+    bool activateESP(bool enalbe);
     using tSwapBuffers = BOOL(WINAPI*)(HDC);
 private:
     Memory::Trampoline* trampoline;
     OpenGL* openGL;
 
     HMODULE hOpenGL; // opengl module
+
     void* target; // targetfunction pointer
     BYTE* gateway; // gateway address of trampoline
     BYTE originalBytes[5];

@@ -20,13 +20,16 @@ public:
     void setArmor(int newArmor);      // Set Armor
     void setAmmo(int newAmmo);        // Set Ammo
     void setRecoil(int newRecoil);    // Set Recoil
-    void setRect(int option);
+    void setESP(int enable);
 
 private:
 
     bool initialize();
     uintptr_t baseAddr;
     uintptr_t playerEntitiy;
+
+    int playerCnt = 0;
+    uintptr_t* otherPlayers;
 
     Overlay* overlay;
     

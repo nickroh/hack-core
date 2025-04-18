@@ -29,9 +29,6 @@ bool HackCore::initialize() {
     else {
         return false;
     }
-
-    Log("HACKCORE initialized");
-
     return true;
 }
 
@@ -95,6 +92,8 @@ void HackCore::setRecoil(int newRecoil) {
 
 }
 
-void HackCore::setRect(int option) {
-    overlay->SetBoxOverlay(option);
+
+void HackCore::setESP(int enable) {
+    //overlay->activateESP(enable);
+    overlay->testESP();
 }

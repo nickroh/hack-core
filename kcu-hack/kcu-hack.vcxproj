@@ -165,7 +165,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="code_patch.cpp" />
-    <ClCompile Include="ESP.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="hack_core.cpp" />
     <ClCompile Include="hack_api.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -177,7 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
-    <ClInclude Include="ESP.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="include\code_patch.h" />
     <ClInclude Include="include\constants.h" />
     <ClInclude Include="include\geometry.h" />

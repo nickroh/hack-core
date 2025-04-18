@@ -1,17 +1,42 @@
 // Overlay.cpp
 #include "Overlay.h"
+#include "constants.h"
 #include "OpenGL.h"
 #include "Memory.h"
 #include "Overlay.h"
 #include "geometry.h"
+#include "constants.h"
+#include "player.h"
 #include <iostream>
 #include <algorithm>
 #include <windows.h>
+#include <sstream>
 #include "util.h"
 
 Overlay::tSwapBuffers oSwapBuffers = nullptr;
+Overlay* g_overlay = nullptr;
 
 BOOL WINAPI hkSwapBuffers(HDC hdc) {
+
+    uintptr_t base = reinterpret_cast<uintptr_t>(g_overlay->ac_client);
+    int playerCount = *reinterpret_cast<int*>(base + Offsets::PlayerCount);
+    uintptr_t* entityList = *reinterpret_cast<uintptr_t**>(base + Offsets::EntityList);
+    uintptr_t localPlayer = *reinterpret_cast<uintptr_t*>(base + Offsets::LocalPlayer);
+    int myTeam = *reinterpret_cast<int*>(localPlayer + Offsets::Team);
+
+    std::vector<Player> players;
+
+    for (int i = 1; i < playerCount; i++) {
+        uintptr_t playerPtr = entityList[i];
+
+        if (!playerPtr) continue;
+        DWORD vtable = *reinterpret_cast<DWORD*>(playerPtr);
+        if (vtable != 0x54D07C && vtable != 0x54D0A4) continue;
+
+        Player p(playerPtr, myTeam);
+        players.push_back(p);
+    }
+
     OpenGL openGL;
     Rect rect = Rect(100, 100, 20, 20);
     openGL.SetupOrtho();
@@ -22,6 +47,8 @@ BOOL WINAPI hkSwapBuffers(HDC hdc) {
 
 Overlay::Overlay() {
     std::cout << "Overlay created." << std::endl;
+    g_overlay = this;
+    ac_client = GetModuleHandle(L"ac_client.exe");
     hOpenGL = GetModuleHandleA("opengl32.dll");
     if (!hOpenGL) {
         std::cerr << "[-] Failed to get handle\n";
@@ -41,7 +68,6 @@ Overlay::Overlay() {
         return;
     }
     openGL = new OpenGL();
-    Log("at least overlay inited");
 }
 
 Overlay::~Overlay() {
@@ -58,10 +84,32 @@ Overlay::~Overlay() {
     std::cout << "Overlay destroyed." << std::endl;
 }
 
+void Overlay::testESP() {
+    uintptr_t base = reinterpret_cast<uintptr_t>(ac_client);  // assume ac_client is already set
+    int playerCount = *reinterpret_cast<int*>(base + Offsets::PlayerCount);
+    uintptr_t* entityList = *reinterpret_cast<uintptr_t**>(base + Offsets::EntityList);
 
-bool Overlay::SetBoxOverlay(bool enable) {
+    uintptr_t localPlayer = *reinterpret_cast<uintptr_t*>(base + Offsets::LocalPlayer);
+    int myTeam = *reinterpret_cast<int*>(localPlayer + Offsets::Team);
+
+    for (int i = 1; i < playerCount; ++i) {
+        uintptr_t playerPtr = entityList[i];
+        if (!playerPtr) continue;
+
+        DWORD vtable = *reinterpret_cast<DWORD*>(playerPtr);
+        if (vtable != 0x54D07C && vtable != 0x54D0A4) continue;
+
+        Player p(playerPtr, myTeam);
+        vec pos = p.getPosition();
+
+        std::stringstream ss;
+        ss << "Player " << i << " -> Pos: (" << pos.x << ", " << pos.y << ", " << pos.z << ") team: " << p.getTeam();
+        Log(ss.str());
+    }
+}
+
+bool Overlay::activateESP(bool enable) {
     if (enable && !activated) {
-        Log("entered");
 
         //target = reinterpret_cast<void*>(oSwapBuffers);// Save hook target for unhooking
         BYTE* dst = reinterpret_cast<BYTE*>(&hkSwapBuffers);
@@ -70,13 +118,11 @@ bool Overlay::SetBoxOverlay(bool enable) {
         // Backup original bytes before hooking
         memcpy(originalBytes, target, 5);
 
-        Log("initing Trampoline");
         // Create trampoline and store original function pointer
         oSwapBuffers = reinterpret_cast<tSwapBuffers>(
             trampoline->CreateTrampoline((BYTE*)target, dst, 5)
             );
 
-        Log("Trampoline created");
         activated = true;
     }
     else if (!enable && activated) {
