@@ -8,6 +8,7 @@ namespace Offsets {
     constexpr uint32_t EntityList = 0x18AC04;   // ac_client.exe + 0x18AC04
     constexpr uint32_t FOV = 0x18A7CC;   // ac_client.exe + 0x18A7CC
     constexpr uint32_t PlayerCount = 0x18AC0C;   // ac_client.exe + 0x18AC0C
+    constexpr uint32_t ViewMatrix = 0x17DFD0;  // ac_client.exe + 0x17DFD0  // 0x17DFD0
 
     // Player Position Offsets
     constexpr uint32_t PositionX = 0x2C;
@@ -51,6 +52,9 @@ namespace Offsets {
 
     constexpr uint32_t v_bot = 0x54D07C;
     constexpr uint32_t v_user = 0x540DA4;
+
+    constexpr uint32_t ScreenWidth = 0x191ED8;
+    constexpr uint32_t ScreenHeight = 0x591EDC;
 
     // RECOIL PATTERN
     //constexpr uint32_t 

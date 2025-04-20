@@ -94,6 +94,6 @@ void HackCore::setRecoil(int newRecoil) {
 
 
 void HackCore::setESP(int enable) {
-    //overlay->activateESP(enable);
-    overlay->testESP();
+    overlay->activateESP(enable);
+    //overlay->testESP();
 }
