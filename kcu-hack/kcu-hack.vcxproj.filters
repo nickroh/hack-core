@@ -44,6 +44,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AimBot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\code_patch.h">
@@ -70,16 +73,19 @@
     <ClInclude Include="include\Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="def.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\OpenGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AimBot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

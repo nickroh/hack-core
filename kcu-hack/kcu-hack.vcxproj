@@ -164,6 +164,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AimBot.cpp" />
     <ClCompile Include="code_patch.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="hack_core.cpp" />
@@ -176,15 +177,16 @@
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="def.h" />
-    <ClInclude Include="player.h" />
+    <ClInclude Include="include\AimBot.h" />
     <ClInclude Include="include\code_patch.h" />
     <ClInclude Include="include\constants.h" />
+    <ClInclude Include="include\def.h" />
     <ClInclude Include="include\geometry.h" />
     <ClInclude Include="include\hack-core.h" />
     <ClInclude Include="include\Memory.h" />
     <ClInclude Include="include\OpenGL.h" />
     <ClInclude Include="include\Overlay.h" />
+    <ClInclude Include="include\player.h" />
     <ClInclude Include="include\receiver.h" />
     <ClInclude Include="include\SharedMemory.h" />
     <ClInclude Include="include\util.h" />
