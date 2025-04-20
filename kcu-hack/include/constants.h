@@ -11,14 +11,14 @@ namespace Offsets {
     constexpr uint32_t ViewMatrix = 0x17DFD0;  // ac_client.exe + 0x17DFD0  // 0x17DFD0
 
     // Player Position Offsets
-    constexpr uint32_t PositionX = 0x2C;
-    constexpr uint32_t PositionY = 0x30;
-    constexpr uint32_t PositionZ = 0x28;
+    constexpr uint32_t PositionX = 0x28;
+    constexpr uint32_t PositionY = 0x2C;
+    constexpr uint32_t PositionZ = 0x30;
 
     // Head Position Offsets
     constexpr uint32_t HeadX = 0x4;
-    constexpr uint32_t HeadY = 0xC;
-    constexpr uint32_t HeadZ = 0x8;
+    constexpr uint32_t HeadY = 0x8;
+    constexpr uint32_t HeadZ = 0xC;
 
     // Player Camera Offsets
     constexpr uint32_t CameraX = 0x34;

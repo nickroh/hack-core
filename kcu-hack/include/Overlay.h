@@ -9,9 +9,6 @@
 #include "OpenGL.h"
 #include "util.h"
 
-const int VIRTUAL_SCREEN_WIDTH = 800;
-const int VIRTUAL_SCREEN_HEIGHT = 600;
-const int GAME_UNIT_MAGIC = 400;
 
 const float PLAYER_HEIGHT = 5.25f;
 const float PLAYER_WIDTH = 2.0f;

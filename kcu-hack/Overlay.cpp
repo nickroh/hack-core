@@ -142,30 +142,20 @@ void Overlay::materializeESP() {
         Player p(playerPtr, myTeam);
         //players.push_back(p);
 
-        vec screen;
+        vec foot;
+        vec head;
         int viewport[4];
         glGetIntegerv(GL_VIEWPORT, viewport);
 
-        if (!WorldToScreen(p.getPosition(), screen, matrixPtr, viewport[2], viewport[3])) {
+        if (!WorldToScreen(p.getPosition(), foot, matrixPtr, viewport[2], viewport[3]) || !WorldToScreen(p.getHead(), head, matrixPtr, viewport[2], viewport[3])) {
             continue;
         } 
 
-        std::stringstream ss;
-        ss << viewport[2] << ", " << viewport[3] << " input: (x,y,z) " << p.getPosition().x << "," << p.getPosition().y << "," << p.getPosition().z << " => screen coord " << ": " << screen.x << ", " << screen.y << " team: " << p.getTeam();
+        float scale = (foot.y - head.y) / PLAYER_HEIGHT;
+        float width = PLAYER_WIDTH * scale;
 
-        if (cnt % 1000 == 0) {
-            Log(ss.str());
-        }
-
-        float tmp = p.getPosition().Distance(Vec3(matrixPtr[12], matrixPtr[13], matrixPtr[14]));
-        float scale = (GAME_UNIT_MAGIC / tmp) * (viewport[2] / VIRTUAL_SCREEN_WIDTH);
-        float x = screen.x - scale;
-        float y = screen.y - scale * PLAYER_ASPECT_RATIO;
-        float width = scale * 2;
-        float height = scale * PLAYER_ASPECT_RATIO * 2;
-
-        Rect rect = Rect(screen.x, screen.y, 50, 100);
-        openGL->Outline(rect, 5, openGL->GREEN);
+        Rect rect = Rect(head.x - width / 2, head.y, width, (foot.y - head.y));
+        openGL->Outline(rect, 3, openGL->GREEN);
     }
     cnt++;
     openGL->RestoreGL();
@@ -193,33 +183,6 @@ bool Overlay::WorldToScreen(vec pos, vec& screen, float matrix[16], int windowWi
     // modify the screen cordinates passed by reference
     screen.x = (windowWidth / 2 * NDC.x) + (NDC.x + windowWidth / 2);
     screen.y = -(windowHeight / 2 * NDC.y) + (NDC.y + windowHeight / 2);
-
-
-    if (cnt % 1000 == 0) {
-        Log("View Matrix Dump:");
-        for (int row = 0; row < 4; ++row) {
-            char buffer[256];
-            snprintf(buffer, sizeof(buffer), "[ %.4f %.4f %.4f %.4f ]",
-                matrix[0 + row], matrix[4 + row],
-                matrix[8 + row], matrix[12 + row]);
-            Log(buffer);
-        }
-    }
-
-    if (cnt % 1000 == 0) {
-        std::stringstream logStream;
-        // Log the clipCoords values
-        logStream << "clipCoords: (" << clipCoords.x << ", " << clipCoords.y << ", " << clipCoords.z << ", " << clipCoords.w << ")";
-        Log(logStream.str());
-        // Log the NDC values
-        logStream.str("");  // Clear the log stream
-        logStream << "Normalized Device Coordinates: (" << NDC.x << ", " << NDC.y << ", " << NDC.z << ")";
-        Log(logStream.str());
-        // Log the screen coordinates
-        logStream.str("");  // Clear the log stream
-        logStream << "Screen coordinates: (" << screen.x << ", " << screen.y << ")";
-        Log(logStream.str());
-    }
 
     return true;
 }
