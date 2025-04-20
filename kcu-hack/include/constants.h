@@ -33,6 +33,13 @@ namespace Offsets {
     constexpr uint32_t GrenadeAmmo = 0x144;
     constexpr uint32_t ReservedAmmoRifle = 0x11C; // not tested out if applicable to other types of weapon
 
+    // Player Info Offsets
+    constexpr uint32_t Team = 0x030C;
+    constexpr uint32_t Dead = 0x0318;
+
+    // Vtable value
+    constexpr uint32_t v_bot = 0x54D07C;
+    constexpr uint32_t v_user = 0x540DA4;
 
     // Fire Rate Offsets
     constexpr uint32_t FastFireAR = 0x164;
@@ -44,19 +51,16 @@ namespace Offsets {
     constexpr uint32_t Health = 0xEC;
     constexpr uint32_t Armor = 0xF0;
     constexpr uint32_t PlayerName = 0x205;
-
+       
     constexpr uint32_t RecoilASMADDR = 0xC2EC3;
+       
 
-    constexpr uint32_t Team = 0x030C;
-    constexpr uint32_t Dead = 0x0318;
-
-    constexpr uint32_t v_bot = 0x54D07C;
-    constexpr uint32_t v_user = 0x540DA4;
-
+    // Game Info   
     constexpr uint32_t ScreenWidth = 0x191ED8;
     constexpr uint32_t ScreenHeight = 0x591EDC;
-
+       
+    constexpr uint32_t GameMode = 0x18ABF8;
     // RECOIL PATTERN
-    //constexpr uint32_t 
-    //F3 0F 11 56 38
+    // constexpr uint32_t
+    // F3 0F 11 56 38
 }

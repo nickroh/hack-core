@@ -76,3 +76,9 @@ uintptr_t get_base_address(DWORD pid, const wstring& moduleName) {
     CloseHandle(hSnapshot);
     return baseAddress;
 }
+
+bool isTeamGame(int gameMode) {
+    return gameMode == 0 || gameMode == 4 || gameMode == 5 || gameMode == 7
+        || gameMode == 11 || gameMode == 13 || gameMode == 14 || gameMode == 16
+        || gameMode == 17 || gameMode == 20 || gameMode == 21;
+}

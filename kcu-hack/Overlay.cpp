@@ -126,8 +126,7 @@ void Overlay::materializeESP() {
     uintptr_t localPlayer = *reinterpret_cast<uintptr_t*>(base + Offsets::LocalPlayer);
     int myTeam = *reinterpret_cast<int*>(localPlayer + Offsets::Team);
     float* matrixPtr = reinterpret_cast<float*>(base + Offsets::ViewMatrix);
-    float viewMatrix[16];
-    memcpy(viewMatrix, matrixPtr, sizeof(float) * 16);
+    int gameMode = *reinterpret_cast<int*>(base + Offsets::GameMode);
 
     //std::vector<Player> players;
 
@@ -155,7 +154,8 @@ void Overlay::materializeESP() {
         float width = PLAYER_WIDTH * scale;
 
         Rect rect = Rect(head.x - width / 2, head.y, width, (foot.y - head.y));
-        openGL->Outline(rect, 3, openGL->GREEN);
+        const GLubyte* color = !p.isEnemy() && isTeamGame(gameMode) ? openGL->GREEN : openGL->RED;
+        openGL->Outline(rect, 3, color);
     }
     cnt++;
     openGL->RestoreGL();
