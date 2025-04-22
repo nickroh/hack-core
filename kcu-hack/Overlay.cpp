@@ -7,6 +7,7 @@
 #include "geometry.h"
 #include "constants.h"
 #include "player.h"
+#include "AimBot.h"
 #include <iostream>
 #include <algorithm>
 #include <windows.h>
@@ -47,6 +48,8 @@ Overlay::Overlay() {
         return;
     }
     openGL = new OpenGL();
+    aimbot = new AimBot();
+
 }
 
 Overlay::~Overlay() {
@@ -59,6 +62,9 @@ Overlay::~Overlay() {
     }
     if (openGL) {
         delete openGL;
+    }
+    if (aimbot) {
+        delete aimbot;
     }
     std::cout << "Overlay destroyed." << std::endl;
 }
@@ -117,6 +123,12 @@ bool Overlay::activateESP(bool enable) {
     return true;
 }
 
+bool Overlay::setAimBot(bool enable, float offset) {
+    aimbotActivated = enable;
+    scale = offset;
+    return true;
+}
+
 void Overlay::materializeESP() {
     openGL->SetupOrtho();
 
@@ -128,6 +140,7 @@ void Overlay::materializeESP() {
     float* matrixPtr = reinterpret_cast<float*>(base + Offsets::ViewMatrix);
     int gameMode = *reinterpret_cast<int*>(base + Offsets::GameMode);
 
+    Player local(localPlayer, myTeam);
     //std::vector<Player> players;
 
     for (int i = 1; i < playerCount; i++) {
@@ -154,11 +167,29 @@ void Overlay::materializeESP() {
         float width = PLAYER_WIDTH * scale;
 
         Rect rect = Rect(head.x - width / 2, head.y, width, (foot.y - head.y));
-        const GLubyte* color = !p.isEnemy() && isTeamGame(gameMode) ? openGL->GREEN : openGL->RED;
-        openGL->Outline(rect, 3, color);
+        const GLubyte* color;
+        if (!p.isEnemy() && isTeamGame(gameMode)) {
+            color = openGL->GREEN;
+        }
+        else {
+            color = openGL->RED;
+            if (aimbotActivated && !p.isDead()) {
+                aimbot->addPlayer(p);
+            }
+        }
+
+        if (!p.isDead()) {
+            openGL->Outline(rect, 3, color);
+        }
+
     }
     cnt++;
     openGL->RestoreGL();
+
+    if (aimbotActivated) {
+        aimbot->calculateBestTarget(local, scale);
+        aimbot->clear();
+    }
 }
 
 bool Overlay::WorldToScreen(vec pos, vec& screen, float matrix[16], int windowWidth, int windowHeight) {

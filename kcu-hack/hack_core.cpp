@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "hack-core.h"
 #include "code_patch.h"
+#include "AimBot.h"
 #include "Overlay.h"
 
 // Default constructor
@@ -19,6 +20,7 @@ HackCore::~HackCore() {
 
 bool HackCore::initialize() {
     overlay = new Overlay();
+    aimbot = new AimBot();
 
     HMODULE hModule = GetModuleHandle(L"ac_client.exe");
 
@@ -71,20 +73,20 @@ void HackCore::setAmmo(int newAmmo) {
 
 // Set Recoil method
 void HackCore::setRecoil(int newRecoil) {
-    char opcode[] = "\x90\x90\x90\x90\x90"; // sizeof(opcode) = 6 due to null terminator
-    char original[] = "\xF3\x0F\x11\x56\x38";
+    char opcode[] = "\xC2\x08\x00";
+    char original[] = "\x83\xEC\x28";
     uintptr_t y_recoil_addr = baseAddr + Offsets::RecoilASMADDR;
 
     DWORD oldProtect;
-    if (VirtualProtect((LPVOID)y_recoil_addr, 5, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+    if (VirtualProtect((LPVOID)y_recoil_addr, 3, PAGE_EXECUTE_READWRITE, &oldProtect)) {
         if (newRecoil) {
-            memcpy((void*)y_recoil_addr, original, 5);
+            memcpy((void*)y_recoil_addr, original, 3);
         }
         else {
-            memcpy((void*)y_recoil_addr, opcode, 5);
+            memcpy((void*)y_recoil_addr, opcode, 3);
         }
 
-        VirtualProtect((LPVOID)y_recoil_addr, 5, oldProtect, &oldProtect);
+        VirtualProtect((LPVOID)y_recoil_addr, 3, oldProtect, &oldProtect);
     }
     else {
         std::cerr << "VirtualProtect failed: " << GetLastError() << std::endl;
@@ -94,5 +96,10 @@ void HackCore::setRecoil(int newRecoil) {
 
 void HackCore::setESP(int enable) {
     overlay->activateESP(enable);
+    //overlay->testESP();
+}
+
+void HackCore::setAimBot(int enable, float scale) {
+    overlay->setAimBot(enable, scale);
     //overlay->testESP();
 }

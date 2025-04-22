@@ -61,6 +61,14 @@ void Receiver::start() {
             case 5:
                 hack->setESP(option);
                 break;
+            case 6:
+                if (option < 0) {
+                    hack->setAimBot(0,0.0f);
+                }
+                else {
+                    hack->setAimBot(1, option);
+                }
+                break;
             case 0:
                 end = true;
                 break;

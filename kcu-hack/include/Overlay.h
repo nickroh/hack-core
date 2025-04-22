@@ -8,7 +8,7 @@
 #include "Memory.h"
 #include "OpenGL.h"
 #include "util.h"
-
+#include "AimBot.h"
 
 const float PLAYER_HEIGHT = 5.25f;
 const float PLAYER_WIDTH = 2.0f;
@@ -26,20 +26,23 @@ public:
     void testESP();
     void materializeESP();
     bool activateESP(bool enalbe);
+    bool setAimBot(bool enable, float scale);
     using tSwapBuffers = BOOL(WINAPI*)(HDC);
 
 private:
     Memory::Trampoline* trampoline;
     OpenGL* openGL;
-
+    AimBot* aimbot;
     HMODULE hOpenGL; // opengl module
 
     void* target; // targetfunction pointer
     BYTE* gateway; // gateway address of trampoline
     BYTE originalBytes[5];
 
-    bool activated = false;
+    float scale = 0;
 
+    bool activated = false;
+    bool aimbotActivated = false;
     // converts in game 3d coordinate to monitor 2d coordinate
     bool WorldToScreen(vec pos, vec& screen, float matrix[16], int windowWidth, int windowHeight);
 

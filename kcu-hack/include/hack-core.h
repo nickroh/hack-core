@@ -2,7 +2,8 @@
 #define HACKCORE_H
 
 #include <Windows.h>
-#include <Overlay.h>
+#include "Overlay.h"
+#include "AimBot.h"
 
 // HackCore class definition
 class HackCore {
@@ -21,7 +22,7 @@ public:
     void setAmmo(int newAmmo);        // Set Ammo
     void setRecoil(int newRecoil);    // Set Recoil
     void setESP(int enable);
-
+    void setAimBot(int enable, float scale);
 private:
 
     bool initialize();
@@ -32,6 +33,7 @@ private:
     uintptr_t* otherPlayers;
 
     Overlay* overlay;
+    AimBot* aimbot;
     
 };
 

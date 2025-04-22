@@ -22,6 +22,11 @@ Player::Player(uintptr_t p, int myTeam) {
     enemy = (myTeam != team);
     dead = *(reinterpret_cast<bool*>(p + Offsets::Dead));
 }
+
+Player::Player() {
+
+}
+
 vec Player::getPosition() {
     return position;
 }

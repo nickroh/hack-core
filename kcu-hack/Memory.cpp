@@ -1,6 +1,7 @@
 #include "Memory.h"
 #include <iostream>
 #include "util.h"
+#include <sstream>
 
 Memory::Memory() {
     std::cout << "Memory instance created." << std::endl;
@@ -62,7 +63,11 @@ BYTE* Memory::Trampoline::CreateTrampoline(BYTE* src, BYTE* dst, const size_t le
 
     gateway[len] = 0xE9; // JMP opcode
     *(uintptr_t*)(gateway + len + 1) = jumpBackAddr;
+    std::stringstream ss;
+    ss << "jumpBackAddr: rel = 0x" << std::hex << jumpBackAddr << " (back to " << (void*)(src + len) << ")";
 
+    // Log the formatted message
+    Log(ss.str().c_str());
     Log("Wrote jump back from trampoline to original function");
 
     // Hook the original function

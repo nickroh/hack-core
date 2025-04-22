@@ -82,3 +82,29 @@ bool isTeamGame(int gameMode) {
         || gameMode == 11 || gameMode == 13 || gameMode == 14 || gameMode == 16
         || gameMode == 17 || gameMode == 20 || gameMode == 21;
 }
+
+bool WorldToScreen(vec pos, vec& screen, float matrix[16], int windowWidth, int windowHeight) {
+    Vec4 clipCoords;
+
+    clipCoords.x = matrix[0] * pos.x + matrix[4] * pos.y + matrix[8] * pos.z + matrix[12];
+    clipCoords.y = matrix[1] * pos.x + matrix[5] * pos.y + matrix[9] * pos.z + matrix[13];
+    clipCoords.z = matrix[2] * pos.x + matrix[6] * pos.y + matrix[10] * pos.z + matrix[14];
+    clipCoords.w = matrix[3] * pos.x + matrix[7] * pos.y + matrix[11] * pos.z + matrix[15];
+
+    // if it's inside or behind you
+    if (clipCoords.w < 0.1f)
+    {
+        return false;
+    }
+
+    Vec3 NDC;
+    NDC.x = clipCoords.x / clipCoords.w;
+    NDC.y = clipCoords.y / clipCoords.w;
+    NDC.z = clipCoords.z / clipCoords.w;
+
+    // modify the screen cordinates passed by reference
+    screen.x = (windowWidth / 2 * NDC.x) + (NDC.x + windowWidth / 2);
+    screen.y = -(windowHeight / 2 * NDC.y) + (NDC.y + windowHeight / 2);
+
+    return true;
+}

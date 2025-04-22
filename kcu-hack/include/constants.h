@@ -52,14 +52,17 @@ namespace Offsets {
     constexpr uint32_t Armor = 0xF0;
     constexpr uint32_t PlayerName = 0x205;
        
-    constexpr uint32_t RecoilASMADDR = 0xC8BA0;
-       
-
     // Game Info   
     constexpr uint32_t ScreenWidth = 0x191ED8;
     constexpr uint32_t ScreenHeight = 0x591EDC;
        
     constexpr uint32_t GameMode = 0x18ABF8;
+  
+    // ASM 
+    constexpr uint32_t FireASMADDR = 0xC73FE;
+    constexpr uint32_t RecoilASMADDR = 0xC8BA0;
+
+
     // RECOIL PATTERN
     // constexpr uint32_t
     // F3 0F 11 56 38

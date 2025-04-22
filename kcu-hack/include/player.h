@@ -4,6 +4,7 @@
 class Player {
 public:
     Player(uintptr_t p, int myTeam);
+    Player();
 
     vec getHead();
     vec getPosition();
