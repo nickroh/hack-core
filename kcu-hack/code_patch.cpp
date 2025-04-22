@@ -9,8 +9,8 @@ using namespace std;
 
 void code_patch(int option = 0) {
     uint32_t y_recoil_addr = 0; // var that stores address of player
-    char opcode[] = "\x90\x90\x90\x90\x90";
-    char original[] = "\xF3\x0F\x11\x56\x38";
+    char opcode[] = "\xC2\x08\x00";
+    char original[] = "\x83\xEC\x28";
     // getting process info
     wstring targetProcess = L"ac_client.exe";
     DWORD pid = check_pid(targetProcess);
@@ -24,11 +24,11 @@ void code_patch(int option = 0) {
 
     if (option) {
         //char* y_recoil_addr = original;
-        WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &original, sizeof(char) * 5, NULL);
+        WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &original, sizeof(char) * 3, NULL);
     }
     else {
         //char* y_recoil_addr = opcode;
-        WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &opcode, sizeof(char) * 5, NULL);
+        WriteProcessMemory(TargetProcess, (BYTE*)(y_recoil_addr), &opcode, sizeof(char) * 3, NULL);
     }
     
 
